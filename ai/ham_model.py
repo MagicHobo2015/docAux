@@ -1,5 +1,5 @@
 # 
-#       DocAux Image Classifier..
+#       DocAux Image Classifier..  This version doesnt work!!! YOU WANT ham_model_maker.y
 # 
 from imports import *
 from myConfig import Configuration
