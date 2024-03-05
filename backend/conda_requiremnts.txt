@@ -1,41 +1,231 @@
-# This file may be used to create an environment using:
-# $ conda create --name <env> --file <this file>
-# platform: linux-64
-_libgcc_mutex=0.1=main
-_openmp_mutex=5.1=1_gnu
-asgiref=3.5.2=py312h06a4308_0
-bzip2=1.0.8=h7b6447c_0
-ca-certificates=2023.12.12=h06a4308_0
-click=8.1.7=py312h06a4308_0
-django=4.1=py312h06a4308_0
-expat=2.5.0=h6a678d5_0
-flask=2.2.5=py312h06a4308_0
-flask-sqlalchemy=3.0.2=py312h06a4308_0
-greenlet=3.0.1=py312h6a678d5_0
-itsdangerous=2.0.1=pyhd3eb1b0_0
-jinja2=3.1.3=py312h06a4308_0
-ld_impl_linux-64=2.38=h1181459_1
-libffi=3.4.4=h6a678d5_0
-libgcc-ng=11.2.0=h1234567_1
-libgomp=11.2.0=h1234567_1
-libstdcxx-ng=11.2.0=h1234567_1
-libuuid=1.41.5=h5eee18b_0
-markupsafe=2.1.3=py312h5eee18b_0
-ncurses=6.4=h6a678d5_0
-openssl=3.0.13=h7f8727e_0
-pip=23.3.1=py312h06a4308_0
-python=3.12.1=h996f2a0_0
-python-dotenv=0.21.0=py312h06a4308_0
-readline=8.2=h5eee18b_0
-setuptools=68.2.2=py312h06a4308_0
-sqlalchemy=2.0.25=py312h5eee18b_0
-sqlite=3.41.2=h5eee18b_0
-sqlparse=0.4.4=py312h06a4308_0
-tk=8.6.12=h1ccaba5_0
-typing-extensions=4.9.0=py312h06a4308_1
-typing_extensions=4.9.0=py312h06a4308_1
-tzdata=2023d=h04d1e81_0
-werkzeug=2.3.8=py312h06a4308_0
-wheel=0.41.2=py312h06a4308_0
-xz=5.4.5=h5eee18b_0
-zlib=1.2.13=h5eee18b_0
+2024-02-03 16:58:36  (rev 0)
+
+2024-02-05 15:34:05  (rev 1)
+    +_libgcc_mutex-0.1 (defaults/linux-64)
+    +_openmp_mutex-5.1 (defaults/linux-64)
+    +asgiref-3.5.2 (defaults/linux-64)
+    +bzip2-1.0.8 (defaults/linux-64)
+    +ca-certificates-2023.12.12 (defaults/linux-64)
+    +django-4.1 (defaults/linux-64)
+    +expat-2.5.0 (defaults/linux-64)
+    +ld_impl_linux-64-2.38 (defaults/linux-64)
+    +libffi-3.4.4 (defaults/linux-64)
+    +libgcc-ng-11.2.0 (defaults/linux-64)
+    +libgomp-11.2.0 (defaults/linux-64)
+    +libstdcxx-ng-11.2.0 (defaults/linux-64)
+    +libuuid-1.41.5 (defaults/linux-64)
+    +ncurses-6.4 (defaults/linux-64)
+    +openssl-3.0.13 (defaults/linux-64)
+    +pip-23.3.1 (defaults/linux-64)
+    +python-3.12.1 (defaults/linux-64)
+    +readline-8.2 (defaults/linux-64)
+    +setuptools-68.2.2 (defaults/linux-64)
+    +sqlite-3.41.2 (defaults/linux-64)
+    +sqlparse-0.4.4 (defaults/linux-64)
+    +tk-8.6.12 (defaults/linux-64)
+    +tzdata-2023d (defaults/noarch)
+    +wheel-0.41.2 (defaults/linux-64)
+    +xz-5.4.5 (defaults/linux-64)
+    +zlib-1.2.13 (defaults/linux-64)
+
+2024-02-10 13:57:49  (rev 2)
+    +click-8.1.7 (defaults/linux-64)
+    +python-dotenv-0.21.0 (defaults/linux-64)
+
+2024-02-10 13:58:03  (rev 3)
+    +flask-2.2.5 (defaults/linux-64)
+    +itsdangerous-2.0.1 (defaults/noarch)
+    +jinja2-3.1.3 (defaults/linux-64)
+    +markupsafe-2.1.3 (defaults/linux-64)
+    +werkzeug-2.3.8 (defaults/linux-64)
+
+2024-02-10 14:31:31  (rev 4)
+    +greenlet-3.0.1 (defaults/linux-64)
+    +sqlalchemy-2.0.25 (defaults/linux-64)
+    +typing-extensions-4.9.0 (defaults/linux-64)
+    +typing_extensions-4.9.0 (defaults/linux-64)
+
+2024-02-15 15:59:57  (rev 5)
+    +flask-sqlalchemy-3.0.2 (defaults/linux-64)
+
+2024-02-17 19:29:03  (rev 6)
+     asgiref  {3.5.2 (defaults/linux-64) -> 3.5.2 (defaults/linux-64)}
+     click  {8.1.7 (defaults/linux-64) -> 8.1.7 (defaults/linux-64)}
+     django  {4.1 (defaults/linux-64) -> 4.1 (defaults/linux-64)}
+     flask  {2.2.5 (defaults/linux-64) -> 2.2.5 (defaults/linux-64)}
+     flask-sqlalchemy  {3.0.2 (defaults/linux-64) -> 3.0.2 (defaults/linux-64)}
+     greenlet  {3.0.1 (defaults/linux-64) -> 3.0.1 (defaults/linux-64)}
+     jinja2  {3.1.3 (defaults/linux-64) -> 3.1.3 (defaults/linux-64)}
+     markupsafe  {2.1.3 (defaults/linux-64) -> 2.1.3 (defaults/linux-64)}
+     pip  {23.3.1 (defaults/linux-64) -> 23.3.1 (defaults/linux-64)}
+     python  {3.12.1 (defaults/linux-64) -> 3.11.7 (defaults/linux-64)}
+     python-dotenv  {0.21.0 (defaults/linux-64) -> 0.21.0 (defaults/linux-64)}
+     setuptools  {68.2.2 (defaults/linux-64) -> 68.2.2 (defaults/linux-64)}
+     sqlalchemy  {2.0.25 (defaults/linux-64) -> 2.0.25 (defaults/linux-64)}
+     sqlparse  {0.4.4 (defaults/linux-64) -> 0.4.4 (defaults/linux-64)}
+     typing-extensions  {4.9.0 (defaults/linux-64) -> 4.9.0 (defaults/linux-64)}
+     typing_extensions  {4.9.0 (defaults/linux-64) -> 4.9.0 (defaults/linux-64)}
+     werkzeug  {2.3.8 (defaults/linux-64) -> 2.3.8 (defaults/linux-64)}
+     wheel  {0.41.2 (defaults/linux-64) -> 0.41.2 (defaults/linux-64)}
+
+2024-02-17 19:29:20  (rev 7)
+     openssl  {3.0.13 (defaults/linux-64) -> 1.1.1w (defaults/linux-64)}
+     python  {3.11.7 (defaults/linux-64) -> 3.11.5 (defaults/linux-64)}
+    +mysql-connector-c-6.1.11 (defaults/linux-64)
+    +mysqlclient-2.0.3 (defaults/linux-64)
+
+2024-02-17 19:33:51  (rev 8)
+    +cyrus-sasl-2.1.28 (defaults/linux-64)
+    +krb5-1.20.1 (defaults/linux-64)
+    +libedit-3.1.20230828 (defaults/linux-64)
+    +mysql-5.7.24 (defaults/linux-64)
+
+2024-02-23 12:05:55  (rev 9)
+    +blas-1.0 (defaults/linux-64)
+    +bottleneck-1.3.7 (defaults/linux-64)
+    +intel-openmp-2023.1.0 (defaults/linux-64)
+    +mkl-2023.1.0 (defaults/linux-64)
+    +mkl-service-2.4.0 (defaults/linux-64)
+    +mkl_fft-1.3.8 (defaults/linux-64)
+    +mkl_random-1.2.4 (defaults/linux-64)
+    +numexpr-2.8.7 (defaults/linux-64)
+    +numpy-1.26.4 (defaults/linux-64)
+    +numpy-base-1.26.4 (defaults/linux-64)
+    +pandas-2.1.4 (defaults/linux-64)
+    +python-dateutil-2.8.2 (defaults/noarch)
+    +python-tzdata-2023.3 (defaults/noarch)
+    +pytz-2023.3.post1 (defaults/linux-64)
+    +six-1.16.0 (defaults/noarch)
+    +tbb-2021.8.0 (defaults/linux-64)
+
+2024-02-23 12:06:29  (rev 10)
+     numpy  {1.26.4 (defaults/linux-64) -> 1.23.5 (defaults/linux-64)}
+     numpy-base  {1.26.4 (defaults/linux-64) -> 1.23.5 (defaults/linux-64)}
+    +_tflow_select-2.3.0 (defaults/linux-64)
+    +abseil-cpp-20211102.0 (defaults/linux-64)
+    +absl-py-1.4.0 (defaults/linux-64)
+    +aiohttp-3.9.3 (defaults/linux-64)
+    +aiosignal-1.2.0 (defaults/noarch)
+    +astunparse-1.6.3 (defaults/noarch)
+    +attrs-23.1.0 (defaults/linux-64)
+    +blinker-1.6.2 (defaults/linux-64)
+    +brotli-python-1.0.9 (defaults/linux-64)
+    +c-ares-1.19.1 (defaults/linux-64)
+    +cachetools-4.2.2 (defaults/noarch)
+    +certifi-2024.2.2 (defaults/linux-64)
+    +cffi-1.16.0 (defaults/linux-64)
+    +charset-normalizer-2.0.4 (defaults/noarch)
+    +cryptography-41.0.3 (defaults/linux-64)
+    +flatbuffers-2.0.0 (defaults/linux-64)
+    +frozenlist-1.4.0 (defaults/linux-64)
+    +gast-0.4.0 (defaults/noarch)
+    +giflib-5.2.1 (defaults/linux-64)
+    +google-auth-2.22.0 (defaults/linux-64)
+    +google-auth-oauthlib-0.5.2 (defaults/linux-64)
+    +google-pasta-0.2.0 (defaults/noarch)
+    +grpc-cpp-1.48.2 (defaults/linux-64)
+    +grpcio-1.48.2 (defaults/linux-64)
+    +h5py-3.9.0 (defaults/linux-64)
+    +hdf5-1.12.1 (defaults/linux-64)
+    +icu-58.2 (defaults/linux-64)
+    +idna-3.4 (defaults/linux-64)
+    +jpeg-9e (defaults/linux-64)
+    +keras-2.12.0 (defaults/linux-64)
+    +keras-preprocessing-1.1.2 (defaults/noarch)
+    +libcurl-8.2.1 (defaults/linux-64)
+    +libev-4.33 (defaults/linux-64)
+    +libgfortran-ng-11.2.0 (defaults/linux-64)
+    +libgfortran5-11.2.0 (defaults/linux-64)
+    +libnghttp2-1.52.0 (defaults/linux-64)
+    +libpng-1.6.39 (defaults/linux-64)
+    +libprotobuf-3.20.3 (defaults/linux-64)
+    +libssh2-1.10.0 (defaults/linux-64)
+    +markdown-3.4.1 (defaults/linux-64)
+    +multidict-6.0.4 (defaults/linux-64)
+    +oauthlib-3.2.2 (defaults/linux-64)
+    +opt_einsum-3.3.0 (defaults/noarch)
+    +packaging-23.1 (defaults/linux-64)
+    +protobuf-3.20.3 (defaults/linux-64)
+    +pyasn1-0.4.8 (defaults/noarch)
+    +pyasn1-modules-0.2.8 (defaults/noarch)
+    +pycparser-2.21 (defaults/noarch)
+    +pyjwt-2.4.0 (defaults/linux-64)
+    +pyopenssl-23.2.0 (defaults/linux-64)
+    +pysocks-1.7.1 (defaults/linux-64)
+    +python-flatbuffers-2.0 (defaults/noarch)
+    +re2-2022.04.01 (defaults/linux-64)
+    +requests-2.31.0 (defaults/linux-64)
+    +requests-oauthlib-1.3.0 (defaults/noarch)
+    +rsa-4.7.2 (defaults/noarch)
+    +scipy-1.11.4 (defaults/linux-64)
+    +snappy-1.1.10 (defaults/linux-64)
+    +tensorboard-2.12.1 (defaults/linux-64)
+    +tensorboard-data-server-0.7.0 (defaults/linux-64)
+    +tensorboard-plugin-wit-1.6.0 (defaults/noarch)
+    +tensorflow-2.12.0 (defaults/linux-64)
+    +tensorflow-base-2.12.0 (defaults/linux-64)
+    +tensorflow-estimator-2.12.0 (defaults/linux-64)
+    +termcolor-2.1.0 (defaults/linux-64)
+    +urllib3-1.26.18 (defaults/linux-64)
+    +wrapt-1.14.1 (defaults/linux-64)
+    +yarl-1.9.3 (defaults/linux-64)
+
+2024-02-23 12:15:16  (rev 11)
+    +joblib-1.2.0 (defaults/linux-64)
+    +scikit-learn-1.3.0 (defaults/linux-64)
+    +threadpoolctl-2.2.0 (defaults/noarch)
+
+2024-02-23 15:16:33  (rev 12)
+    +brotli-1.0.9 (defaults/linux-64)
+    +brotli-bin-1.0.9 (defaults/linux-64)
+    +contourpy-1.2.0 (defaults/linux-64)
+    +cycler-0.11.0 (defaults/noarch)
+    +dbus-1.13.18 (defaults/linux-64)
+    +fontconfig-2.14.1 (defaults/linux-64)
+    +fonttools-4.25.0 (defaults/noarch)
+    +freetype-2.12.1 (defaults/linux-64)
+    +glib-2.78.4 (defaults/linux-64)
+    +glib-tools-2.78.4 (defaults/linux-64)
+    +gst-plugins-base-1.14.1 (defaults/linux-64)
+    +gstreamer-1.14.1 (defaults/linux-64)
+    +kiwisolver-1.4.4 (defaults/linux-64)
+    +lcms2-2.12 (defaults/linux-64)
+    +lerc-3.0 (defaults/linux-64)
+    +libbrotlicommon-1.0.9 (defaults/linux-64)
+    +libbrotlidec-1.0.9 (defaults/linux-64)
+    +libbrotlienc-1.0.9 (defaults/linux-64)
+    +libclang-14.0.6 (defaults/linux-64)
+    +libclang13-14.0.6 (defaults/linux-64)
+    +libcups-2.4.2 (defaults/linux-64)
+    +libdeflate-1.17 (defaults/linux-64)
+    +libglib-2.78.4 (defaults/linux-64)
+    +libiconv-1.16 (defaults/linux-64)
+    +libllvm14-14.0.6 (defaults/linux-64)
+    +libpq-12.15 (defaults/linux-64)
+    +libtiff-4.5.1 (defaults/linux-64)
+    +libwebp-base-1.3.2 (defaults/linux-64)
+    +libxcb-1.15 (defaults/linux-64)
+    +libxkbcommon-1.0.1 (defaults/linux-64)
+    +libxml2-2.10.4 (defaults/linux-64)
+    +lz4-c-1.9.4 (defaults/linux-64)
+    +matplotlib-3.8.0 (defaults/linux-64)
+    +matplotlib-base-3.8.0 (defaults/linux-64)
+    +munkres-1.1.4 (defaults/noarch)
+    +openjpeg-2.4.0 (defaults/linux-64)
+    +pcre2-10.42 (defaults/linux-64)
+    +pillow-10.2.0 (defaults/linux-64)
+    +ply-3.11 (defaults/linux-64)
+    +pyparsing-3.0.9 (defaults/linux-64)
+    +pyqt-5.15.10 (defaults/linux-64)
+    +pyqt5-sip-12.13.0 (defaults/linux-64)
+    +qt-main-5.15.2 (defaults/linux-64)
+    +sip-6.7.12 (defaults/linux-64)
+    +tornado-6.3.3 (defaults/linux-64)
+    +zstd-1.5.5 (defaults/linux-64)
+
+2024-02-23 18:15:37  (rev 13)
+    +imbalanced-learn-0.11.0 (defaults/linux-64)
+
+2024-03-01 12:35:07  (rev 14)
+    +pymysql-1.0.2 (defaults/linux-64)
+
