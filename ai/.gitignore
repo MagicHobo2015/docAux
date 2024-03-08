@@ -1,2 +1,6 @@
 # redundant but i really dont want to push this to github.
 HAM10000/
+test_data/
+models/
+best_cancer_model_yet/
+best_cancer_model_yet(copy)/
