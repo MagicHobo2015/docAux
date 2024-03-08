@@ -89,7 +89,7 @@ class Configuration:
         self.base_dir = './HAM10000'
         self.csv_file = 'hmnist_28_28_RGB.csv'
         self.train_split = (0.75, 0.25)
-        self.random_seed = 49 # the meaning of life.
+        self.random_seed = 42 # the meaning of life.
         self.saved = False
         self.debug = True
 
@@ -107,7 +107,7 @@ class Configuration:
         # Training configuration ---------------------------------------------
         # alter these at your own risk!
         self.class_weights = {0:1,1:0.5,2:1,3:1,4:1,5:1,6:1}
-        self.epochs = 50
+        self.epochs = 20
         self.batch_size = 128
         self.stop_early = True
 
@@ -243,6 +243,7 @@ def main():
             oversample = RandomOverSampler()
 
             x = skin_dataFrame.drop('label', axis=1)
+            print(x)
             y = skin_dataFrame['label']
 
             x, y = oversample.fit_resample(x, y)

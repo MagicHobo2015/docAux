@@ -350,7 +350,7 @@ def main():
     # Here we have some choices to make.
     print(messages.loaded_message)
     _next = input(messages.options)
-    
+
     choosing = True
     while choosing:
     
