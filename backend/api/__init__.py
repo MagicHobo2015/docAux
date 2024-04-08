@@ -54,7 +54,7 @@ def _connect_database(app: Flask):
       db.session.execute(text('SELECT 1'))
       logger.info('Database connection successful')
     except Exception as e:
-      logger.error('Database connection failed! ERROR:', e)
+      logger.error(f'Database connection failed! ERROR: {str(e)}')
 
 def _setup_routes(app: Flask):
   app.register_blueprint(user_bp, url_prefix='/api/users')
