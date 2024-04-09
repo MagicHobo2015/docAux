@@ -6,7 +6,6 @@
 
 from cgi import test
 import os
-from matplotlib.cbook import flatten
 import pandas as pd
 import numpy as np
 from sys import exit
@@ -89,7 +88,7 @@ class Configuration:
         self.base_dir = './HAM10000'
         self.csv_file = 'hmnist_28_28_RGB.csv'
         self.train_split = (0.75, 0.25)
-        self.random_seed = 49 # the meaning of life.
+        self.random_seed = 42 # the meaning of life.
         self.saved = False
         self.debug = True
 
@@ -107,8 +106,8 @@ class Configuration:
         # Training configuration ---------------------------------------------
         # alter these at your own risk!
         self.class_weights = {0:1,1:0.5,2:1,3:1,4:1,5:1,6:1}
-        self.epochs = 50
-        self.batch_size = 128
+        self.epochs = 10
+        self.batch_size = 50
         self.stop_early = True
 
 
@@ -160,7 +159,7 @@ def create_sequential_model():
         model.add(Dense(units=7, activation='softmax', kernel_initializer='glorot_uniform', name='classifier'))
 
 
-        model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=[accuracy, Recall()])
+        model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy', Recall()])# accuracy is also a function.
 
         return model
 
@@ -171,11 +170,11 @@ def display_accuracy_graph(model_history):
      loss=pd.DataFrame(model_history.history)
      loss=loss[['accuracy','val_accuracy']]
      loss.plot()
-     input("Press enter to continue.")
+     
 
 
 # saves whatever version of the model you want, default is both.
-def save_our_models(model, file_name='ham_cancer_model.h5', version='both'):
+def save_our_models(model, file_name='models', version='both'):
         if version == 'both':
             # save the dev version.
             model.save(file_name, overwrite=True)

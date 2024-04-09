@@ -23,6 +23,7 @@ class Configuration:
         self.SPINNER = 'pulse' # 'twirls'
         # Path to the CSV file containing metadata
         self.ham_csv = './HAM10000/HAM10000_metadata.csv'
+        self.isic_csv = 'isic_training_test_data/'
         # an 80 - 20 split for training and testing.
         self.train_test_split = np.array([0.9,0.1])
         self.batch_size = 90 # adjust for you
