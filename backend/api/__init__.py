@@ -1,15 +1,17 @@
 from datetime import timedelta
 import os
 from flask import Flask
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from sqlalchemy import text
 
 from config.logger import get_logger
 from api.models import db, TokenBlocklist
-from api.controllers.user_controller import user_bp
 from api.controllers.auth_controller import auth_bp
+from api.controllers.doctor_controller import doctor_bp
 from api.controllers.image_controller import image_bp
+from api.controllers.patient_controller import patient_bp
 
 logger = get_logger(__name__)
 
@@ -56,10 +58,15 @@ def _connect_database(app: Flask):
     except Exception as e:
       logger.error(f'Database connection failed! ERROR: {str(e)}')
 
+def _configure_cors_if_dev(app: Flask):
+  if os.environ['RUN_MODE'] == 'debug':
+    CORS(app)
+
 def _setup_routes(app: Flask):
-  app.register_blueprint(user_bp, url_prefix='/api/users')
   app.register_blueprint(auth_bp, url_prefix='/api/auth')
+  app.register_blueprint(doctor_bp, url_prefix='/api/doctors')
   app.register_blueprint(image_bp, url_prefix='/api/images')
+  app.register_blueprint(patient_bp, url_prefix='/api/patients')
 
 #-------------------------------------------------------------------------------
 # Public methods
@@ -68,6 +75,7 @@ def _setup_routes(app: Flask):
 def create_flask_app():
   _load_env_variables()
   app = _initialize_flask_app()
+  _configure_cors_if_dev(app)
   _connect_database(app)
   _add_jwt_auth(app)
   _setup_routes(app)
