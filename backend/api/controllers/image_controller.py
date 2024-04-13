@@ -4,7 +4,8 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from jsonschema import Draft202012Validator, validate, ValidationError
 
 from api.models import db, Image
-from api.controllers.common.access_control import require_doctor_role_on_endpoints
+from api.controllers.common.access_control import\
+  require_doctor_role_on_endpoints
 from config.logger import get_logger
 from utils.error_utils import handle_error
 
