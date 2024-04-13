@@ -1,12 +1,10 @@
 from datetime import datetime, timezone
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity,\
-  jwt_required
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity
 from jsonschema import Draft202012Validator, validate, ValidationError
 
 from api.models import db, Doctor, TokenBlocklist
-from api.controllers.common.access_control import\
-  require_doctor_role_on_endpoints
+from api.controllers.common.access_control import doctor_required
 from config.logger import get_logger
 from utils.error_utils import handle_error
 from utils.password_utils import hash_password
@@ -14,8 +12,6 @@ from utils.password_utils import hash_password
 logger = get_logger(__name__)
 
 doctor_bp = Blueprint('doctor', __name__)
-# Set up access control so only doctors can access these endpoints
-require_doctor_role_on_endpoints(doctor_bp)
 
 create_doctor_schema = {
   'type': 'object',
@@ -48,7 +44,7 @@ create_doctor_schema = {
 }
 
 @doctor_bp.route('/', methods=['GET'])
-@jwt_required()
+@doctor_required
 def get_doctors():
   try:
     doctors = db.session.query(Doctor).all()
@@ -57,7 +53,7 @@ def get_doctors():
     return handle_error(logger, e, 'get_doctors')
 
 @doctor_bp.route('/self', methods=['GET'])
-@jwt_required()
+@doctor_required
 def get_current_doctor():
   try:
     doctor_id = get_jwt_identity()['id']
@@ -69,7 +65,7 @@ def get_current_doctor():
     return handle_error(logger, e, 'get_current_doctor')
 
 @doctor_bp.route('/<int:doctor_id>', methods=['GET'])
-@jwt_required()
+@doctor_required
 def get_doctor(doctor_id: int):
   try:
     doctor = db.session.query(Doctor).get(doctor_id)
@@ -131,7 +127,7 @@ def create_doctor():
     return handle_error(logger, e, 'create_doctor')
 
 @doctor_bp.route('/', methods=['DELETE'])
-@jwt_required()
+@doctor_required
 def delete_doctor():
   try:
     doctor_id = get_jwt_identity()['id']

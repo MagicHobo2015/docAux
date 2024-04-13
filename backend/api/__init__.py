@@ -11,7 +11,11 @@ from api.models import db, TokenBlocklist
 from api.controllers.auth_controller import auth_bp
 from api.controllers.doctor_controller import doctor_bp
 from api.controllers.image_controller import image_bp
+from api.controllers.notification_controller import notification_bp
 from api.controllers.patient_controller import patient_bp
+from utils.error_types import DoctorRoleMissingException,\
+  PatientRoleMissingException
+from utils.error_utils import handle_error
 
 logger = get_logger(__name__)
 
@@ -66,6 +70,7 @@ def _setup_routes(app: Flask):
   app.register_blueprint(auth_bp, url_prefix='/api/auth')
   app.register_blueprint(doctor_bp, url_prefix='/api/doctors')
   app.register_blueprint(image_bp, url_prefix='/api/images')
+  app.register_blueprint(notification_bp, url_prefix='/api/notifications')
   app.register_blueprint(patient_bp, url_prefix='/api/patients')
 
 #-------------------------------------------------------------------------------
@@ -79,4 +84,16 @@ def create_flask_app():
   _connect_database(app)
   _add_jwt_auth(app)
   _setup_routes(app)
+  @app.errorhandler(DoctorRoleMissingException)
+  def handle_doctor_role_missing_error(e: DoctorRoleMissingException):
+    return handle_error(logger=logger, e=e,
+                        method_name='handle_doctor_role_missing_error',
+                        message='You are unauthorized to access this resource',
+                        status_code=403)
+  @app.errorhandler(PatientRoleMissingException)
+  def handle_patient_role_missing_error(e: PatientRoleMissingException):
+    return handle_error(logger=logger, e=e,
+                        method_name='handle_patient_role_missing_error',
+                        message='You are unauthorized to access this resource',
+                        status_code=403)
   return app

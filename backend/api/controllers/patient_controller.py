@@ -5,6 +5,8 @@ from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity,\
 from jsonschema import Draft202012Validator, validate, ValidationError
 
 from api.models import db, Patient, TokenBlocklist
+from api.controllers.common.access_control import doctor_required,\
+  patient_required
 from config.logger import get_logger
 from utils.error_utils import handle_error
 from utils.password_utils import hash_password
@@ -41,8 +43,17 @@ def get_patients():
   except Exception as e:
     return handle_error(logger, e, 'get_patients')
 
-@patient_bp.route('/self', methods=['GET'])
+@patient_bp.route('/no-doctor', methods=['GET'])
 @jwt_required()
+def get_patients_without_doctor():
+  try:
+    patients = db.session.query(Patient).filter_by(doctor_id=None).all()
+    return jsonify([patient.serialize() for patient in patients])
+  except Exception as e:
+    return handle_error(logger, e, 'get_patients')
+
+@patient_bp.route('/self', methods=['GET'])
+@patient_required
 def get_current_patient():
   try:
     patient_id = get_jwt_identity()['id']
@@ -54,10 +65,10 @@ def get_current_patient():
     return handle_error(logger, e, 'get_current_patient')
 
 @patient_bp.route('/notifications', methods=['GET'])
-@jwt_required()
+@patient_required
 def get_notifications():
   try:
-    patient_id = get_jwt_identity['id']
+    patient_id = get_jwt_identity()['id']
     patient = db.session.query(Patient).get(patient_id)
     if patient:
       return jsonify([
@@ -74,7 +85,7 @@ def get_patient(patient_id: int):
     patient = db.session.query(Patient).get(patient_id)
     if patient:
       return jsonify(patient.serialize())
-    return jsonify({'error': 'User not found'}), 404
+    return jsonify({'error': 'Patient not found'}), 404
   except Exception as e:
     return handle_error(logger, e, 'get_patient')
 
@@ -123,8 +134,29 @@ def create_patient():
       return jsonify({'error': e.message}), 400
     return handle_error(logger, e, 'create_patient')
 
+@patient_bp.route('/assign-doctor/<int:patient_id>', methods=['PUT'])
+@doctor_required
+def assign_doctor_to_patient(patient_id: int):
+  try:
+    patient = db.session.query(Patient).get(patient_id)
+    if patient is None:
+      return jsonify({'error': 'Patient not found'}), 404
+
+    if patient.doctor_id is not None:
+      return jsonify({
+        'error': 'Patient has already been assigned a doctor'
+      }), 400
+
+    doctor_id = get_jwt_identity()['id']
+    patient.doctor_id = doctor_id
+    db.session.commit()
+
+    return jsonify({'message': 'Doctor assigned successfully'})
+  except Exception as e:
+    return handle_error(logger, e, 'assign_doctor_to_patient')
+
 @patient_bp.route('/', methods=['DELETE'])
-@jwt_required()
+@patient_required
 def delete_patient():
   try:
     patient_id = get_jwt_identity()['id']
