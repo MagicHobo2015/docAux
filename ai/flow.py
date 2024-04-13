@@ -5,19 +5,21 @@ import datetime
 from tensorflow.keras.metrics import Recall
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import image_dataset_from_directory
-from tensorflow.keras.layers import Rescaling, Dense, Dropout, Conv2D, RandomFlip, MaxPool2D, Flatten, BatchNormalization, CategoryEncoding
+from tensorflow.keras.layers import Resizing, Rescaling, RandomRotation, Dense, Dropout, Conv2D, RandomFlip, MaxPool2D, Flatten, BatchNormalization, CategoryEncoding
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau, TensorBoard
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
 
 
 def create_model(img_size, metrics):
         
+        # resizes, rescale, Augmentation: Flips, rotates.. Add: zoom
+        preprocessing_layers = [ Resizing( img_size, img_size), Rescaling( 1./255 ), RandomFlip(mode='horizontal_and_vertical'), RandomRotation(factor=0.2, fill_mode='nearest', seed=42) ]
+
+
         # create the model
-        model = Sequential()
-        model.add(CategoryEncoding(num_tokens=7, output_mode='one_hot'))
-        model.add( Rescaling( 1./255, input_shape = (img_size, img_size, 3) ))
-        model.add( RandomFlip(''))
-        model.add(Conv2D(256, kernel_size = (3,3), activation = 'relu'))
+        model = Sequential(preprocessing_layers)
+        model.add(Conv2D(256, kernel_size = (3,3), activation = 'relu', input_shape=(None, None,None, 3)))
         model.add(BatchNormalization())
         model.add(MaxPool2D(pool_size = (2,2)))
         model.add(Dropout(0.3))
@@ -34,8 +36,8 @@ def create_model(img_size, metrics):
         # model.add(Dense(64))
         model.add(Dense(32))
         model.add(Dense(7, activation='softmax'))
+        model.build(input_shape=(None, None,None, 3))
         model.compile(loss='categorical_crossentropy', optimizer='Adam', metrics=metrics)
-        model.summary()
         return model
 
 
@@ -43,15 +45,15 @@ def main():
 
     # The directory to pull images from.
     dir = 'images/'
-    epochs = 2
+    epochs = 100
     labels = 'inferred'
     c_names = [ 'akiec', 'bcc', 'blk', 'df', 'mel', 'nv', 'vasc' ]
-    img_size = 128
+    img_size = 256
     shuffle = True
     seed = 42
     verbose = True
     val_split = .20 # this will be 80% training and 20% validation.
-    batch_size = 32 # 32 is a good baseline.
+    batch_size = 64 # 32 is a good baseline.
     # Figures out the best buffer size
     AUTOTUNE = tf.data.AUTOTUNE # automatically, Helps with threadpooling.
     pos_fix = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -68,22 +70,44 @@ def main():
     callbacks = [check_points, stop_early, reduce_lr, tensorboard_callback]
 
 
-    train_ds = image_dataset_from_directory(dir, labels='inferred', validation_split=val_split, subset='training', seed=seed, image_size=( img_size, img_size ), batch_size=batch_size)
+    train_ds = image_dataset_from_directory(dir, labels='inferred', validation_split=val_split, subset='training', seed=seed, image_size=( img_size, img_size ), batch_size=batch_size, label_mode='categorical')
 
-    val_ds = image_dataset_from_directory(dir, validation_split=val_split, subset='validation', seed=seed, image_size=(img_size, img_size), batch_size=batch_size)
+    val_ds = image_dataset_from_directory(dir, labels='inferred', label_mode='categorical',validation_split=val_split, subset='validation', seed=seed, image_size=(img_size, img_size), batch_size=batch_size)
 
-    for batch in train_ds:
-        #  print(batch[0].shape)
-        #  print(batch[1].shape)
-         print(batch[1][0])
+    test_dir = 'test_images/'
+    test_ds = image_dataset_from_directory(test_dir, labels='inferred', label_mode='categorical', batch_size=batch_size)
+
+    print(test_ds)
 
     # # tune dataset
     # train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
     # val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
     # model = create_model(img_size=img_size, metrics=metrics)
+    # model.summary()
+
+    # def log_confusion_matrix(epoch, logs):
+        
+    #     test_data = test_ds[0]
+
+    #     # Use the model to predict the values from the validation dataset.
+    #     test_pred_raw = model.predict()
+    #     test_pred = np.argmax(test_pred_raw, axis=1)
+
+    #     # Calculate the confusion matrix.
+    #     cm = confusion_matrix(test_labels, test_pred)
+    #     # Log the confusion matrix as an image summary.
+    #     figure = plot_confusion_matrix(cm, class_names=class_names)
+    #     cm_image = plot_to_image(figure)
+
+    #     # Log the confusion matrix as an image summary.
+    #     with file_writer_cm.as_default():
+    #         tf.summary.image("epoch_confusion_matrix", cm_image, step=epoch)
+
 
     # history = model.fit(train_ds, validation_data=val_ds, epochs=epochs, verbose=1, callbacks=callbacks)
+
+    # model.save('models/')
 
     # acc = history.history['accuracy']
     # val_acc = history.history['val_accuracy']

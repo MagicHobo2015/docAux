@@ -35,7 +35,7 @@ class Configuration:
 def main():
     # change csv to dataframe, change labels to digits, bring in images and size them.
 
-    model = tf.keras.models.load_model('models')
+    model = tf.keras.models.load_model('model_current')
     # model.save('models')
 
     # Load the metadata into a DataFrame
