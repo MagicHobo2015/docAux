@@ -5,3 +5,5 @@ models/
 best_cancer_model_yet/
 best_cancer_model_yet(copy)/
 isic_training_test_data/
+images/
+test_images/
