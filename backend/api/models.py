@@ -1,7 +1,11 @@
-import base64
+import datetime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects.mysql import MEDIUMTEXT
 
 db = SQLAlchemy()
+
+def get_current_time():
+  return datetime.datetime.now(datetime.UTC).strftime('%Y-%m-%d %H:%M:%S')
 
 class TokenBlocklist(db.Model):
   __tablename__ = 'token_blocklist'
@@ -16,11 +20,14 @@ class PatientNotification(db.Model):
   read = db.Column(db.Boolean, nullable=False, server_default='0')
   patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'),
                          nullable=False)
+  timestamp = db.Column(db.DateTime,
+                        default=get_current_time)
 
   def serialize(self):
     return {
       'id': self.id,
-      'message': self.message
+      'message': self.message,
+      'timestamp': self.timestamp
     }
 
 class Patient(db.Model):
@@ -144,10 +151,10 @@ class Image(db.Model):
                           db.ForeignKey('doctors.id'),
                           nullable=False)
     image_name = db.Column(db.String(255), nullable=False)
-    image_data = db.Column(db.BLOB, nullable=False)
+    image_data = db.Column(MEDIUMTEXT, nullable=False)
 
     def serialize(self):
       return {
         'imageName': self.image_name,
-        'imageData': base64.b64encode(self.image_data).decode()
+        'imageData': self.image_data
       }

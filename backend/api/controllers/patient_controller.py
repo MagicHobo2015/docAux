@@ -71,6 +71,7 @@ def get_notifications():
     patient_id = get_jwt_identity()['id']
     patient = db.session.query(Patient).get(patient_id)
     if patient:
+      patient.notifications.reverse()
       return jsonify([
         notification.serialize() for notification in patient.notifications
       ])

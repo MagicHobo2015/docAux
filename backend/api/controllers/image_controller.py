@@ -1,4 +1,3 @@
-import base64
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity
 from jsonschema import Draft202012Validator, validate, ValidationError
@@ -58,8 +57,7 @@ def create_image():
              format_checker=Draft202012Validator)
 
     image_name = data.get('imageName')
-    image_data = data.get('imageData')
-    image_data_bytes = base64.b64decode(image_data)
+    image_data = data.get('imageData')\
 
     existing_image = db.session.query(Image)\
       .filter_by(doctor_id=doctor_id, image_name=image_name).first()
@@ -67,7 +65,7 @@ def create_image():
       return jsonify({'error': 'An image with that name already exists'}), 400
 
     new_image = Image(doctor_id=doctor_id, image_name=image_name,
-                      image_data=image_data_bytes)
+                      image_data=image_data)
     db.session.add(new_image)
     db.session.commit()
 
