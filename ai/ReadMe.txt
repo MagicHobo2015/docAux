@@ -38,4 +38,11 @@ Instructions
     Utilize TensorBoard for visualizing training progress.
     Checkpoints and logs are stored for monitoring and reference.
 
+
+Links
+    The link to the dataset organized by class.
+    https://drive.google.com/drive/folders/1ZCOZ8X7a_EEIwetus5Z8WtFQrswY1aBZ?usp=sharing
+
+
+
 Feel free to explore and contribute to the improvement of the skin cancer classification model!
