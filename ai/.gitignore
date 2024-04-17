@@ -1,4 +1,14 @@
 # redundant but i really dont want to push this to github.
 HAM10000/
+<<<<<<< HEAD
 images/
 *.jpg
+=======
+test_data/
+models/
+best_cancer_model_yet/
+best_cancer_model_yet(copy)/
+isic_training_test_data/
+images/
+test_images/
+>>>>>>> f993b5f428732c39d683eca8635cfde13877b4c6
