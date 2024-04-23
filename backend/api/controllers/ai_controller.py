@@ -22,7 +22,7 @@ model = get_ai_model()
 
 # Endpoint for making predictions
 @ai_bp.route('/', methods=['POST'])
-# @jwt_required
+@jwt_required
 def create_prediction():
     try:
         # Get JSON data from request

@@ -1,4 +1,8 @@
 # This is for working things out.
+
+#   Current:    Figuring out how to convert predictions into something usefull.
+#
+
 import tensorflow as tf
 from numpy import argmax
 from tensorflow.keras.utils import load_img
