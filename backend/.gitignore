@@ -162,3 +162,4 @@ cython_debug/
 # The ham dataset
 HAM10000/
 .conda/
+*.jpg
