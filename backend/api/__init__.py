@@ -7,6 +7,7 @@ from sqlalchemy import text
 
 from config.logger import get_logger
 from api.models import db, TokenBlocklist
+from api.controllers.ai_controller import ai_bp
 from api.controllers.user_controller import user_bp
 from api.controllers.auth_controller import auth_bp
 from api.controllers.image_controller import image_bp
@@ -33,6 +34,7 @@ def _initialize_flask_app():
   # Add jwt auth to app
   app.config['JWT_SECRET_KEY'] = os.environ['JWT_SECRET_KEY']
   app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+  app.config['AI_MODEL_DIR'] = os.environ['AI_MODEL_DIR']
   return app
 
 def _check_token_in_blocklist(_, jwt_payload: dict) -> bool:
@@ -57,9 +59,11 @@ def _connect_database(app: Flask):
       logger.error(f'Database connection failed! ERROR: {str(e)}')
 
 def _setup_routes(app: Flask):
-  app.register_blueprint(user_bp, url_prefix='/api/users')
+  # app.register_blueprint(user_bp, url_prefix='/api/users')
+  app.register_blueprint(user_bp, url_prefix='/api/patients')
   app.register_blueprint(auth_bp, url_prefix='/api/auth')
   app.register_blueprint(image_bp, url_prefix='/api/images')
+  app.register_blueprint(ai_bp, url_prefix='/api/predictions')
 
 #-------------------------------------------------------------------------------
 # Public methods
