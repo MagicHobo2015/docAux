@@ -1,18 +1,19 @@
 from datetime import datetime, timezone
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity
 from jsonschema import Draft202012Validator, validate, ValidationError
 
-from api.models import db, User, TokenBlocklist
+from api.models import db, Doctor, TokenBlocklist
+from api.controllers.common.access_control import doctor_required
 from config.logger import get_logger
 from utils.error_utils import handle_error
 from utils.password_utils import hash_password
 
 logger = get_logger(__name__)
 
-user_bp = Blueprint('user', __name__)
+doctor_bp = Blueprint('doctor', __name__)
 
-create_user_schema = {
+create_doctor_schema = {
   'type': 'object',
   'properties': {
     'email': {'type': 'string', 'format': 'email'},
@@ -42,44 +43,44 @@ create_user_schema = {
   'additionalProperties': False
 }
 
-@user_bp.route('/', methods=['GET'])
-@jwt_required()
-def get_users():
+@doctor_bp.route('/', methods=['GET'])
+@doctor_required
+def get_doctors():
   try:
-    users = db.session.query(User).all()
-    return jsonify([user.serialize() for user in users])
+    doctors = db.session.query(Doctor).all()
+    return jsonify([doctor.serialize_basic_info() for doctor in doctors])
   except Exception as e:
-    return handle_error(logger, e, 'get_users')
+    return handle_error(logger, e, 'get_doctors')
 
-@user_bp.route('/self', methods=['GET'])
-@jwt_required()
-def get_current_user():
+@doctor_bp.route('/self', methods=['GET'])
+@doctor_required
+def get_current_doctor():
   try:
-    user_id = get_jwt_identity()
-    user = db.session.query(User).get(user_id)
-    if user:
-      return jsonify(user.serialize())
+    doctor_id = get_jwt_identity()['id']
+    doctor = db.session.query(Doctor).get(doctor_id)
+    if doctor:
+      return jsonify(doctor.serialize())
     return jsonify({'error': 'User not found'}), 404
   except Exception as e:
-    return handle_error(logger, e, 'get_current_user')
+    return handle_error(logger, e, 'get_current_doctor')
 
-@user_bp.route('/<int:user_id>', methods=['GET'])
-@jwt_required()
-def get_user(user_id: int):
+@doctor_bp.route('/<int:doctor_id>', methods=['GET'])
+@doctor_required
+def get_doctor(doctor_id: int):
   try:
-    user = db.session.query(User).get(user_id)
-    if user:
-      return jsonify(user.serialize())
+    doctor = db.session.query(Doctor).get(doctor_id)
+    if doctor:
+      return jsonify(doctor.serialize_basic_info())
     return jsonify({'error': 'User not found'}), 404
   except Exception as e:
-    return handle_error(logger, e, 'get_user')
+    return handle_error(logger, e, 'get_doctor')
 
-@user_bp.route('/', methods=['POST'])
-def create_user():
+@doctor_bp.route('/', methods=['POST'])
+def create_doctor():
   try:
     data = request.get_json()
 
-    validate(instance=data, schema=create_user_schema,
+    validate(instance=data, schema=create_doctor_schema,
              format_checker=Draft202012Validator.FORMAT_CHECKER)
 
     email = data.get('email')
@@ -97,43 +98,49 @@ def create_user():
     tel_no = practice['telNo']
     mobile_no = data.get('mobileNo')
 
-    existing_user = db.session.query(User).filter_by(email=email).first()
-    if existing_user:
+    existing_doctor = db.session.query(Doctor).filter_by(email=email).first()
+    if existing_doctor:
       return jsonify({
         'error': 'A user with that email address already exists'
       }), 400
     
     hashed_password = hash_password(password).decode()
-    new_user = User(email=email, password=hashed_password,
-                    first_name=first_name, last_name=last_name, dob=dob,
-                    medical_license_no=medical_license_no,
-                    practice_name=practice_name, street_address=street_address,
-                    city=city, state=state, zip_code=zip_code, tel_no=tel_no,
-                    mobile_no=mobile_no)
-    db.session.add(new_user)
+    new_doctor = Doctor(email=email, password=hashed_password,
+                        first_name=first_name, last_name=last_name, dob=dob,
+                        medical_license_no=medical_license_no,
+                        practice_name=practice_name,
+                        street_address=street_address, city=city, state=state,
+                        zip_code=zip_code, tel_no=tel_no, mobile_no=mobile_no)
+    db.session.add(new_doctor)
     db.session.commit()
-    
-    return jsonify(new_user.serialize()), 201
+    access_token = create_access_token(identity={
+                                         'id': new_doctor.id,
+                                         'role': 'doctor'
+                                       })
+    return jsonify({
+      'accessToken': access_token,
+      'user': new_doctor.serialize()
+    }), 201
   except Exception as e:
     if isinstance(e, ValidationError):
       return jsonify({'error': e.message}), 400
-    return handle_error(logger, e, 'create_user')
+    return handle_error(logger, e, 'create_doctor')
 
-@user_bp.route('/', methods=['DELETE'])
-@jwt_required()
-def delete_user():
+@doctor_bp.route('/', methods=['DELETE'])
+@doctor_required
+def delete_doctor():
   try:
-    user_id = get_jwt_identity()
-    user = db.session.query(User).get(user_id)
-    if user:
-      # Revoke the user's access token
+    doctor_id = get_jwt_identity()['id']
+    doctor = db.session.query(Doctor).get(doctor_id)
+    if doctor:
+      # Revoke the doctor's access token
       jti = get_jwt()['jti']
       now = datetime.now(timezone.utc)
       db.session.add(TokenBlocklist(jti=jti, created_at=now))
-      # Delete the user
-      db.session.delete(user)
+      # Delete the doctor
+      db.session.delete(doctor)
       db.session.commit()
       return jsonify({'message': 'User deleted successfully'})
     return jsonify({'error': 'User not found'}), 404
   except Exception as e:
-    return handle_error(logger, e, 'delete_user')
+    return handle_error(logger, e, 'delete_doctor')

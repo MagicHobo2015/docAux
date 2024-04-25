@@ -1,9 +1,9 @@
-import base64
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt_identity
 from jsonschema import Draft202012Validator, validate, ValidationError
 
 from api.models import db, Image
+from api.controllers.common.access_control import doctor_required
 from config.logger import get_logger
 from utils.error_utils import handle_error
 
@@ -22,22 +22,22 @@ create_image_schema = {
 }
 
 @image_bp.route('/', methods=['GET'])
-@jwt_required()
+@doctor_required
 def get_images():
   try:
-    user_id = get_jwt_identity()
-    images = db.session.query(Image).filter_by(user_id=user_id).all()
+    doctor_id = get_jwt_identity()['id']
+    images = db.session.query(Image).filter_by(doctor_id=doctor_id).all()
     return jsonify([image.image_name for image in images])
   except Exception as e:
     return handle_error(logger, e, 'get_images')
 
 @image_bp.route('/<image_name>', methods=['GET'])
-@jwt_required()
+@doctor_required
 def get_image(image_name: str):
   try:
-    user_id = get_jwt_identity()
+    doctor_id = get_jwt_identity()['id']
 
-    image = db.session.query(Image).filter_by(user_id=user_id, 
+    image = db.session.query(Image).filter_by(doctor_id=doctor_id, 
                                               image_name=image_name).first()
     if image:
       return jsonify(image.serialize())
@@ -47,26 +47,25 @@ def get_image(image_name: str):
     return handle_error(logger, e, 'get_image')
 
 @image_bp.route('/', methods=['POST'])
-@jwt_required()
+@doctor_required
 def create_image():
   try:
-    user_id = get_jwt_identity()
+    doctor_id = get_jwt_identity()['id']
     data = request.get_json()
 
     validate(instance=data, schema=create_image_schema,
              format_checker=Draft202012Validator)
 
     image_name = data.get('imageName')
-    image_data = data.get('imageData')
-    image_data_bytes = base64.b64decode(image_data)
+    image_data = data.get('imageData')\
 
     existing_image = db.session.query(Image)\
-      .filter_by(user_id=user_id, image_name=image_name).first()
+      .filter_by(doctor_id=doctor_id, image_name=image_name).first()
     if existing_image:
       return jsonify({'error': 'An image with that name already exists'}), 400
 
-    new_image = Image(user_id=user_id, image_name=image_name,
-                      image_data=image_data_bytes)
+    new_image = Image(doctor_id=doctor_id, image_name=image_name,
+                      image_data=image_data)
     db.session.add(new_image)
     db.session.commit()
 
@@ -77,12 +76,12 @@ def create_image():
     return handle_error(logger, e, 'create_image')
 
 @image_bp.route('/<image_name>', methods=['DELETE'])
-@jwt_required()
+@doctor_required
 def delete_image(image_name: str):
   try:
-    user_id = get_jwt_identity()
+    doctor_id = get_jwt_identity()['id']
 
-    image = db.session.query(Image).filter_by(user_id=user_id, 
+    image = db.session.query(Image).filter_by(doctor_id=doctor_id, 
                                               image_name=image_name).first()
     if image:
       db.session.delete(image)
