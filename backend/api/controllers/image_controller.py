@@ -41,7 +41,7 @@ def get_image(image_name: str):
                                               image_name=image_name).first()
     if image:
       return jsonify(image.serialize())
-    
+
     return jsonify({'error': 'Image not found'}), 404
   except Exception as e:
     return handle_error(logger, e, 'get_image')
