@@ -1,11 +1,12 @@
 import tensorflow as tf
 from config.logger import get_logger
 from utils.error_utils import handle_error
+import os
 
 
 # get logger, for error reporting.
 logger = get_logger(__name__)
-_ai_model_dir = '/home/magichobo/development/docAux/ai/model_current'
+_ai_model_dir = os.path.join('..', os.environ['AI_MODEL_DIR'])
 _ai_model = None
 
 # Just a lonely helper function to load an ai model.
