@@ -8,12 +8,6 @@ from sqlalchemy import text
 
 from config.logger import get_logger
 from api.models import db, TokenBlocklist
-from api.controllers.ai_controller import ai_bp
-from api.controllers.auth_controller import auth_bp
-from api.controllers.doctor_controller import doctor_bp
-from api.controllers.image_controller import image_bp
-from api.controllers.notification_controller import notification_bp
-from api.controllers.patient_controller import patient_bp
 from utils.error_types import DoctorRoleMissingException,\
   PatientRoleMissingException
 from utils.error_utils import handle_error
@@ -69,6 +63,12 @@ def _configure_cors_if_dev(app: Flask):
     CORS(app)
 
 def _setup_routes(app: Flask):
+  from api.controllers.ai_controller import ai_bp
+  from api.controllers.auth_controller import auth_bp
+  from api.controllers.doctor_controller import doctor_bp
+  from api.controllers.image_controller import image_bp
+  from api.controllers.notification_controller import notification_bp
+  from api.controllers.patient_controller import patient_bp
   app.register_blueprint(auth_bp, url_prefix='/api/auth')
   app.register_blueprint(doctor_bp, url_prefix='/api/doctors')
   app.register_blueprint(image_bp, url_prefix='/api/images')
