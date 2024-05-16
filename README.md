@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- **Python**: Ensure you have Python 3.11 or higher installed.
-- **MySQL**: Install MySQL and create a new database.
+- **Python**: Ensure you have Python 3.11.5 installed on your system.
+- **MySQL**: Install MySQL 8.0 [(installation guide)](https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/) and create a new database.
 
 ## Setup Instructions
 
